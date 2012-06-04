@@ -89,6 +89,10 @@ sub make {
 		my $album_list_html = '';
 		foreach my $image (@{$album->{images}}){
 
+			my $resume = $image->{resume};
+			$resume ~= s/</&lt;/g;
+			$resume ~= s/>/&qt;/g;
+
 			$album_list_html .= handle_template(
 				template_path => &ALBUM_ITEM_TMPL,
 				parameters    => {
