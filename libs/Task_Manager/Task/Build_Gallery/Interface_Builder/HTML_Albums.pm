@@ -92,7 +92,7 @@ sub make {
 			$album_list_html .= handle_template(
 				template_path => &ALBUM_ITEM_TMPL,
 				parameters    => {
-					COMMENT   => $image->{resume},
+					COMMENT   => '<![CDATA[' . $image->{resume} . ']]>',
 					IMAGE_URI => $image->{'link'},
 				}
 			);
