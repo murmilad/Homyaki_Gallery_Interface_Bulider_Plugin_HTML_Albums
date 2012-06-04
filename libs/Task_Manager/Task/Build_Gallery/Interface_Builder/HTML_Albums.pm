@@ -76,7 +76,7 @@ sub make {
 
 	foreach my $album (({name => get_new_album_name(), images => $new_images},(@{$albums}))){
 
-		my $album_file_name = "album_$album_index";
+		my $album_file_name = "album_$album_index.html";
 
 		$navigation_list_html .= handle_template(
 			template_path => &NAVIGATION_ITEM_TMPL,
@@ -106,7 +106,7 @@ sub make {
 			}
 		);
 
-		if (open ALBUM_HTML, '<' . &TEMPORARY_PATH . '/' . $album_file_name) {
+		if (open ALBUM_HTML, '>' . &TEMPORARY_PATH . '/' . $album_file_name) {
 			print ALBUM_HTML $album_html;
 			close ALBUM_HTML;
 
@@ -125,7 +125,7 @@ sub make {
 		}
 	);
 
-	if (open INDEX_HTML, '<' . &TEMPORARY_PATH . '/navigation.html') {
+	if (open INDEX_HTML, '>' . &TEMPORARY_PATH . '/navigation.html') {
 		print INDEX_HTML $navi_html;
 		close INDEX_HTML;
 
