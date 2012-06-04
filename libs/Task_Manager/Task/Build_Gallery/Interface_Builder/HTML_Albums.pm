@@ -93,7 +93,7 @@ sub make {
 				template_path => &ALBUM_ITEM_TMPL,
 				parameters    => {
 					COMMENT   => $image->{resume},
-					IMAGE_URI => $image->{image},
+					IMAGE_URI => $params->{images_path} . $image->{image},
 				}
 			);
 		}
