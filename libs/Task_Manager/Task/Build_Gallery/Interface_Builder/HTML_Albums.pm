@@ -76,50 +76,52 @@ sub make {
 
 	foreach my $album (({name => get_new_album_name(), images => $new_images},(@{$albums}))){
 
-		my $album_file_name = "album_$album_index.html";
+		if (scalar(@{$album->{images}}) > 0) {
+			my $album_file_name = "album_$album_index.html";
 
-		$navigation_list_html .= handle_template(
-			template_path => &NAVIGATION_ITEM_TMPL,
-			parameters    => {
-				HEADER => $album->{name},
-				URI    => &ALBUMS_URI . '/' . $album_file_name,
-			}
-		);
-
-		my $album_list_html = '';
-		foreach my $image (@{$album->{images}}){
-
-			my $resume = $image->{resume};
-			$resume =~ s/</&lt;/g;
-			$resume =~ s/>/&qt;/g;
-
-			$album_list_html .= handle_template(
-				template_path => &ALBUM_ITEM_TMPL,
+			$navigation_list_html .= handle_template(
+				template_path => &NAVIGATION_ITEM_TMPL,
 				parameters    => {
-					COMMENT   => $resume,
-					IMAGE_URI => $params->{images_path} . $image->{image},
+					HEADER => $album->{name},
+					URI    => &ALBUMS_URI . '/' . $album_file_name,
 				}
 			);
-		}
 
-		my $album_html = handle_template(
-			template_path => &ALBUM_TMPL,
-			parameters    => {
-				HEADER      => $album->{name},
-				IMAGES_LIST => $album_list_html,
+			my $album_list_html = '';
+			foreach my $image (@{$album->{images}}){
+
+				my $resume = $image->{resume};
+				$resume =~ s/</&lt;/g;
+				$resume =~ s/>/&qt;/g;
+
+				$album_list_html .= handle_template(
+					template_path => &ALBUM_ITEM_TMPL,
+					parameters    => {
+						COMMENT   => $resume,
+						IMAGE_URI => $params->{images_path} . $image->{image},
+					}
+				);
 			}
-		);
 
-		if (open ALBUM_HTML, '>' . &TEMPORARY_PATH . '/' . $album_file_name) {
-			print ALBUM_HTML $album_html;
-			close ALBUM_HTML;
+			my $album_html = handle_template(
+				template_path => &ALBUM_TMPL,
+				parameters    => {
+					HEADER      => $album->{name},
+					IMAGES_LIST => $album_list_html,
+				}
+			);
 
-			upload_file(&TEMPORARY_PATH . '/' . $album_file_name, &ALBUMS_URI . '/' . $album_file_name, $ftp);
-		} else {
-			Homyaki::Logger::print_log('cant open ' . &TEMPORARY_PATH . '/' . $album_file_name . " $!");
+			if (open ALBUM_HTML, '>' . &TEMPORARY_PATH . '/' . $album_file_name) {
+				print ALBUM_HTML $album_html;
+				close ALBUM_HTML;
+
+				upload_file(&TEMPORARY_PATH . '/' . $album_file_name, &ALBUMS_URI . '/' . $album_file_name, $ftp);
+			} else {
+				Homyaki::Logger::print_log('cant open ' . &TEMPORARY_PATH . '/' . $album_file_name . " $!");
+			}
+
+			$album_index++;
 		}
-
-		$album_index++;
 	}
 
 	my $navi_html = handle_template(
