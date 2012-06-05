@@ -135,7 +135,7 @@ sub make {
 		print INDEX_HTML $navi_html;
 		close INDEX_HTML;
 
-		upload_file(&TEMPORARY_PATH . '/navigation.html', &ALBUMS_URI . '/navigation.html', $ftp);
+		upload_file(&TEMPORARY_PATH . '/navigation.html', '/navigation.html', $ftp);
 	} else {
 		Homyaki::Logger::print_log('cant open ' . &TEMPORARY_PATH . " navigation.html $!");
 	}
