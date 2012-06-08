@@ -3,6 +3,7 @@ package Homyaki::Task_Manager::Task::Build_Gallery::Interface_Builder::HTML_Albu
 use strict;
 
 use Net::FTP;
+use URI::Escape;
 use Homyaki::String qw(handle_template);
 
 use constant ALBUMS_URI           => '/albums/';
@@ -71,19 +72,19 @@ sub make {
 	$ftp->login($params->{web_login}, $params->{web_password})
 		or die "Cannot login ", $ftp->message;
 
-	my $album_index = 1;
 	my $navigation_list_html = '';
 
 	foreach my $album (({name => get_new_album_name(), images => $new_images},(@{$albums}))){
 
 		if (scalar(@{$album->{images}}) > 0) {
-			my $album_file_name = "album_$album_index.html";
+			my $album_file_name = "$album->{name}.html";
+			$album_file_name =~ s/\s/_/g;
 
 			$navigation_list_html .= handle_template(
 				template_path => &NAVIGATION_ITEM_TMPL,
 				parameters    => {
 					HEADER => $album->{name},
-					URI    => &ALBUMS_URI . '/' . $album_file_name,
+					URI    => uri_escape(&ALBUMS_URI . '/' . $album_file_name),
 				}
 			);
 
@@ -120,7 +121,6 @@ sub make {
 				Homyaki::Logger::print_log('cant open ' . &TEMPORARY_PATH . '/' . $album_file_name . " $!");
 			}
 
-			$album_index++;
 		}
 	}
 
