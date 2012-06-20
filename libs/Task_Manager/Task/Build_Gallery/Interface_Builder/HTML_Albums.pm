@@ -84,7 +84,7 @@ sub make {
 				template_path => &NAVIGATION_ITEM_TMPL,
 				parameters    => {
 					HEADER => $album->{name},
-					URI    => uri_escape(&ALBUMS_URI . '/' . $album_file_name),
+					URI    => &ALBUMS_URI . '/' . uri_escape($album_file_name),
 				}
 			);
 
