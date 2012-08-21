@@ -1,0 +1,8 @@
+<menue>
+	<menue name="Photo Gallery">
+		<menue name="Photo albums" interface="gallery" form="html_photo_albums" dynamic_navigation="1" >
+			<permission>reader</permission>
+			<permission>guest</permission>
+		</menue>
+	</menue>
+</menue>
