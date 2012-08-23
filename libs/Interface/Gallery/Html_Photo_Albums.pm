@@ -73,8 +73,11 @@ sub get_params {
 	my $params      = $h{params};
 	my $user        = $h{user};
 	my $permissions = $user->{permissions};
-
+	
 	my $result = $params;
+
+	map {$result->{$1} = $2 if $_ =~ /^(\w+):([\w\.]+)$/} split(';', $params->{navi_parameters});
+
 
 	return $result;
 }
@@ -99,9 +102,10 @@ sub get_navigation {
 						unless $navigation->{$2};
 					$navigation->{$2}->{interface}  = 'gallery';
 					$navigation->{$2}->{form}       = 'html_photo_albums';
-					$navigation->{$2}->{parameters} = "&album_html=$1";
-					$navigation->{$2}->{permission} = $menue_permission;
-					$navigation->{$2}->{order}      = ++$order;
+
+					$navigation->{$2}->{navi_parameters} = "album_html:$1";
+					$navigation->{$2}->{permission}      = $menue_permission;
+					$navigation->{$2}->{order}           = ++$order;
 				}
 			}
 			close NAVIGATION;
