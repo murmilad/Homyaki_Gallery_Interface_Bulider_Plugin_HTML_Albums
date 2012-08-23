@@ -35,7 +35,7 @@ sub get_form {
 	);
 
 	my $root_tag = $root->{root};
-	my $body_tag = $root->{body};
+	my $body_tag_ = $root->{body};
 
 	my $permissions = $user->{permissions};
 
@@ -48,7 +48,7 @@ sub get_form {
 			}
 			close ALBUM_HTML;
 
-			$body_tag->add_form_element(
+			$body_tag_->add_form_element(
 				name   => "html_body",
 				type   => &INPUT_TYPE_DIV,
 				body   => $album_html,
@@ -58,9 +58,11 @@ sub get_form {
 	}
 
 
+	my $body_tag = $h{body_tag};
+
 	return {
 		root => $root_tag,
-		body => $body_tag,
+		body => $body_tag_,
 	};
 }
 
@@ -89,6 +91,7 @@ sub get_navigation {
 
 	if (-f (&WWW_PATH . '/navigation.html')) {
 		if (open NAVIGATION, '<' . &WWW_PATH . '/navigation.html') {
+			my $order;
 			while (my $str = <NAVIGATION>) {
 
 				if ($str =~ /href="\/albums\/+([^"]+)".*>([^<]+)</){
@@ -98,6 +101,7 @@ sub get_navigation {
 					$navigation->{$2}->{form}       = 'html_photo_albums';
 					$navigation->{$2}->{parameters} = "&album_html=$1";
 					$navigation->{$2}->{permission} = $menue_permission;
+					$navigation->{$2}->{order}      = ++$order;
 				}
 			}
 			close NAVIGATION;
