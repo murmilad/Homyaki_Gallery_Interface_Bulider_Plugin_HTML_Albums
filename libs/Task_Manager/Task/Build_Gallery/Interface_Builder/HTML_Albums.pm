@@ -95,11 +95,15 @@ sub make {
 				$resume =~ s/</&lt;/g;
 				$resume =~ s/>/&qt;/g;
 
+				my $resume_alt = $image->{resume};
+				$resume_alt =~ s/"/\\"/g;
+
 				$album_list_html .= handle_template(
 					template_path => &ALBUM_ITEM_TMPL,
 					parameters    => {
-						COMMENT   => $resume,
-						IMAGE_URI => $params->{images_path} . $image->{image},
+						IMAGE_COMMENT => $resume_alt,
+						COMMENT       => $resume,
+						IMAGE_URI     => $params->{images_path} . $image->{image},
 					}
 				);
 			}
