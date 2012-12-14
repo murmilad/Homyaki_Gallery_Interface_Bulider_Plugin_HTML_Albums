@@ -104,6 +104,7 @@ sub make {
 						IMAGE_COMMENT => $resume_alt,
 						COMMENT       => $resume,
 						IMAGE_URI     => $params->{images_path} . $image->{image},
+						DATA_URI      => $image->{'link'},
 					}
 				);
 			}
