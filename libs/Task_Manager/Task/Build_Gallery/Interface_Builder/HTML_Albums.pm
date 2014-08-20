@@ -6,6 +6,7 @@ use Net::FTP;
 use URI::Escape;
 use Homyaki::String qw(handle_template);
 
+use Homyaki::Task_Manager::Task::Build_Gallery;
 use constant ALBUMS_URI           => '/albums/';
 
 use constant TMPL_PATH            => '/var/homyaki/gallery/';
@@ -121,7 +122,7 @@ sub make {
 				print ALBUM_HTML $album_html;
 				close ALBUM_HTML;
 
-				upload_file(&TEMPORARY_PATH . '/' . $album_file_name, &ALBUMS_URI . '/' . $album_file_name, $ftp);
+				upload_file(&TEMPORARY_PATH . '/' . $album_file_name, Homyaki::Task_Manager::Task::Build_Gallery::FTP_PATH . &ALBUMS_URI . '/' . $album_file_name, $ftp);
 			} else {
 				Homyaki::Logger::print_log('cant open ' . &TEMPORARY_PATH . '/' . $album_file_name . " $!");
 			}
@@ -140,7 +141,7 @@ sub make {
 		print INDEX_HTML $navi_html;
 		close INDEX_HTML;
 
-		upload_file(&TEMPORARY_PATH . '/navigation.html', '/navigation.html', $ftp);
+		upload_file(&TEMPORARY_PATH . '/navigation.html', Homyaki::Task_Manager::Task::Build_Gallery::FTP_PATH . '/navigation.html', $ftp);
 	} else {
 		Homyaki::Logger::print_log('cant open ' . &TEMPORARY_PATH . " navigation.html $!");
 	}
